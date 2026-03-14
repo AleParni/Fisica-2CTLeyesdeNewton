@@ -1,19 +1,22 @@
-Introducción a las leyes de Newton.
+# ⚡ Introducción a las Leyes de Newton
 
-## ⚡ Introducción a las Leyes de Newton
+## 📦 Primera Ley (Ley de Inercia)
+"Todo cuerpo permanece en reposo o movimiento rectilíneo uniforme a menos que una fuerza neta actúe sobre él."
 
-### 📦 Primera Ley (Ley de Inercia)
-🛋️ "Todo cuerpo permanece en reposo o movimiento rectilíneo uniforme..."
+## 🏋️ Segunda Ley (F = m·a)
+"La aceleración de un objeto es directamente proporcional a la fuerza neta e inversamente proporcional a su masa."
 
-### 🏋️ Segunda Ley (F = m·a)
-📊 "La aceleración es directamente proporcional a la fuerza neta..."
+## 🔄 Tercera Ley (Acción-Reacción)
+"A toda acción corresponde una reacción igual y opuesta."
 
-### 🔄 Tercera Ley (Acción-Reacción)
-🤝 "A toda acción corresponde una reacción igual y opuesta..."
+## 🌍 Gravedad y Peso
+La historia de la manzana y la gravedad...
 
-### 🌍 Gravedad y Peso
-🍎 La historia de la manzana y la gravedad...
+## 📝 Recursos
 
-[Sondeo de conceptos previos](https://aleparni.github.io/Fisica-2CTLeyesdeNewton/forceconceptinventory.html)
+- [Sondeo de conceptos previos](forceconceptinventory.html)
 
+---
 
+⚡ Material diseñado por Prof. Alejandro Parnizari · Asistido por Gemini IA  
+📄 [Licencia CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) · Física 2° CT · 2026
