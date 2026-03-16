@@ -1,6 +1,6 @@
 # ⚡ Introducción a las Leyes de Newton
 
-##[Trabajaremos con el siguiente simulador](https://aleparni.github.io/Fisica-2CTLeyesdeNewton/misionespacialv2.html)
+## [Trabajaremos con el siguiente simulador](https://aleparni.github.io/Fisica-2CTLeyesdeNewton/misionespacialv2.html)
 
 
 ## 📦 Primera Ley (Ley de Inercia)
