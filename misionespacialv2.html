@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misión Lanzamiento — Sondeo Física y Mate</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #111827;
+    --bg3: #1a2236;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #f0f4ff;
+    --text2: #8b9cbf;
+    --text3: #4a5a7a;
+    --blue: #3b82f6;
+    --blue-light: #93c5fd;
+    --blue-bg: rgba(59,130,246,0.12);
+    --teal: #14b8a6;
+    --teal-bg: rgba(20,184,166,0.12);
+    --amber: #f59e0b;
+    --amber-bg: rgba(245,158,11,0.10);
+    --coral: #f97316;
+    --coral-bg: rgba(249,115,22,0.10);
+    --purple: #a78bfa;
+    --purple-bg: rgba(167,139,250,0.12);
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.10);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.10);
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .stars {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 70% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 80%, rgba(255,255,255,0.3) 0%, transparent 100%);
+  }
+
+  .container { position: relative; z-index: 1; width: 100%; max-width: 640px; }
+
+  .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; }
+  .logo-rocket { width: 28px; height: 28px; background: var(--blue-bg); border: 1px solid rgba(59,130,246,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--blue-bg); color: var(--blue-light); border: 1px solid rgba(59,130,246,0.25); }
+
+  .welcome-hero { text-align: center; padding: 2rem 0 1.5rem; }
+  .rocket-icon { width: 72px; height: 72px; margin: 0 auto 1.5rem; background: var(--blue-bg); border: 1px solid rgba(59,130,246,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  
+  .welcome-hero h1 { font-size: 28px; font-weight: 600; margin-bottom: 0.5rem; }
+  .welcome-hero h1 span { color: var(--blue-light); }
+  .welcome-hero p { font-size: 15px; color: var(--text2); line-height: 1.7; max-width: 480px; margin: 0 auto 2rem; }
+
+  .name-field-wrap { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; }
+  .name-field-wrap label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; margin-bottom: 8px; }
+  .name-input { width: 100%; padding: 12px 16px; background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius); color: var(--text); font-size: 16px; outline: none; }
+
+  .modules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.5rem; }
+  .mod-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+  .mod-card-num { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; }
+  .mod-card-name { font-size: 13px; font-weight: 500; }
+
+  .btn { width: 100%; padding: 14px 24px; border-radius: var(--radius); border: none; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.15s; }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:disabled { background: var(--bg3); color: var(--text3); cursor: not-allowed; }
+  .btn-ghost { background: var(--bg2); color: var(--text2); border: 1px solid var(--border2); }
+
+  .systems-bar { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+  .sys-pip { flex: 1; height: 4px; border-radius: 2px; background: var(--bg3); transition: background 0.3s; }
+  .sys-pip.active { background: var(--blue); }
+  .sys-pip.done-ok { background: var(--teal); }
+  .sys-pip.done-partial { background: var(--amber); }
+  .sys-pip.done-fail { background: var(--red); }
+
+  .sys-labels { display: flex; gap: 6px; margin-bottom: 1.25rem; }
+  .sys-label { flex: 1; text-align: center; font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; }
+  .sys-label.active { color: var(--blue-light); }
+  .sys-label.done { color: var(--teal); }
+
+  .progress-bar { height: 2px; background: var(--bg3); border-radius: 1px; margin-bottom: 1.5rem; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--blue); transition: width 0.4s ease; }
+
+  .q-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
+  .q-module-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-bottom: 1rem; }
+  .q-formula { font-family: 'JetBrains Mono', monospace; font-size: 18px; color: var(--text); background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius); padding: 12px 18px; display: inline-block; margin-bottom: 1.25rem; }
+
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .opt-btn { padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--bg3); color: var(--text); cursor: pointer; text-align: left; transition: 0.2s; }
+  .opt-btn:hover:not(:disabled) { border-color: var(--blue); background: var(--blue-bg); }
+  .opt-btn.correct { background: var(--teal-bg) !important; border-color: var(--teal) !important; color: #5eead4 !important; }
+  .opt-btn.wrong { background: var(--red-bg) !important; border-color: var(--red) !important; color: #fca5a5 !important; }
+
+  .feedback { border-radius: var(--radius); padding: 14px 16px; font-size: 14px; margin-bottom: 1rem; }
+  .feedback.ok { background: var(--teal-bg); border: 1px solid rgba(20,184,166,0.3); color: #5eead4; }
+  .feedback.ko { background: var(--coral-bg); border: 1px solid rgba(249,115,22,0.3); color: #fdba74; }
+
+  .results-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
+  .global-num { font-size: 48px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+
+  .tag-blue { background: var(--blue-bg); color: var(--blue-light); border: 1px solid rgba(59,130,246,0.2); }
+  .tag-teal { background: var(--teal-bg); color: #5eead4; border: 1px solid rgba(20,184,166,0.2); }
+  .tag-amber { background: var(--amber-bg); color: #fcd34d; border: 1px solid rgba(245,158,11,0.2); }
+  .tag-coral { background: var(--coral-bg); color: #fdba74; border: 1px solid rgba(249,115,22,0.2); }
+  .tag-purple { background: var(--purple-bg); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.2); }
+  .tag-green { background: var(--green-bg); color: #86efac; border: 1px solid rgba(34,197,94,0.2); }
+
+  @media (max-width: 480px) { .options, .modules-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="container" id="app"></div>
+
+<script>
+const MODULES = [
+  { name: "Operatoria",          short: "OPER",  color: "blue",   icon: "⚡" },
+  { name: "Polinomios 2.º grado",short: "POLI",  color: "teal",   icon: "📐" },
+  { name: "Ecuaciones",          short: "ECUA",  color: "amber",  icon: "⚖️" },
+  { name: "Gráficas lineales",   short: "GRÁF",  color: "coral",  icon: "📈" },
+  { name: "Trigonometría",       short: "TRIG",  color: "purple", icon: "🔭" },
+  { name: "Física (Mecánica)",   short: "FÍS",   color: "green",  icon: "🚀" }
+];
+
+const QUESTIONS = [
+  // Operatoria
+  { mod: 0, text: "Simplifica la expresión:", formula: "3x² + 2x − x² + 5x", opts: ["2x² + 7x", "4x² + 7x", "2x² + 3x", "4x² + 3x"], ans: 0, hint: "Agrupa términos semejantes: (3x²−x²) + (2x+5x) = 2x² + 7x" },
+  { mod: 0, text: "Expande la siguiente potencia:", formula: "(2a)³", opts: ["8a³", "2a³", "6a³", "4a³"], ans: 0, hint: "(2a)³ = 2³ · a³ = 8a³." },
+  { mod: 0, text: "Calcula:", formula: "5 · 2² − 3 · (4 − 6)", opts: ["26", "14", "20", "−2"], ans: 0, hint: "5·4 - 3·(-2) = 20 + 6 = 26." },
+  // Polinomios
+  { mod: 1, text: "Una raíz de:", formula: "x² − 5x + 6 = 0", opts: ["3", "−3", "6", "−1"], ans: 0, hint: "Factorizando: (x-2)(x-3)=0." },
+  { mod: 1, text: "Vértice (x) de:", formula: "y = x² − 4x + 3", opts: ["2", "−2", "4", "3"], ans: 0, hint: "xv = -b/2a = 4/2 = 2." },
+  { mod: 1, text: "Valor mínimo de y en:", formula: "y = x² − 4x + 3", opts: ["−1", "3", "1", "0"], ans: 0, hint: "y(2) = 4 - 8 + 3 = -1." },
+  // Ecuaciones
+  { mod: 2, text: "Despeja x:", formula: "3x − 7 = 14", opts: ["x = 7", "x = 3", "x = 21", "x ≈ 2.3"], ans: 0, hint: "3x = 21 -> x = 7." },
+  { mod: 2, text: "Resuelve:", formula: "2(x + 3) = x + 10", opts: ["x = 4", "x = 7", "x = 16", "x = −4"], ans: 0, hint: "2x + 6 = x + 10 -> x = 4." },
+  { mod: 2, text: "Resuelve:", formula: "4x + 8 = 0", opts: ["x = −2", "x = 2", "x = −8", "x = 0.5"], ans: 0, hint: "4x = -8 -> x = -2." },
+  // Gráficas
+  { mod: 3, text: "Pendiente de:", formula: "y = 3x − 2", opts: ["m = 3", "m = −2", "m = 1/3", "m = 2"], ans: 0, hint: "El coeficiente de x es la pendiente." },
+  { mod: 3, text: "Rectas paralelas tienen:", formula: "", opts: ["Misma pendiente", "Misma ordenada", "Se cortan", "Son perpendiculares"], ans: 0, hint: "m1 = m2." },
+  { mod: 3, text: "¿Qué es 'b' en y = mx + b?", formula: "", opts: ["Ordenada al origen", "Pendiente", "Raíz", "Curvatura"], ans: 0, hint: "Cruce con el eje y." },
+  // Trigonometría
+  { mod: 4, text: "Si sen(30°) = 0.5, sen(150°) vale:", formula: "", opts: ["0.5", "−0.5", "0.866", "1"], ans: 0, hint: "Seno es (+) en 1º y 2º cuadrante." },
+  { mod: 4, text: "Calcula tan(45°) si sen=cos=√2/2:", formula: "tan = sen / cos", opts: ["1", "0", "√2", "0.5"], ans: 0, hint: "Cualquier número dividido por sí mismo es 1." },
+  { mod: 4, text: "Tangente indefinida en:", formula: "", opts: ["90°", "45°", "180°", "0°"], ans: 0, hint: "En 90°, cos=0 y no se puede dividir entre cero." },
+  // Física (Mecánica)
+  { mod: 5, text: "Un móvil recorre 100m en 5s. Su velocidad media es:", formula: "v = Δx / Δt", opts: ["20 m/s", "500 m/s", "0.05 m/s", "10 m/s"], ans: 0, hint: "100 / 5 = 20 m/s." },
+  { mod: 5, text: "Fuerza para acelerar 2kg a 5m/s²:", formula: "F = m · a", opts: ["10 N", "2.5 N", "7 N", "0.4 N"], ans: 0, hint: "2 * 5 = 10 Newtons." },
+  { mod: 5, text: "Si la masa de un objeto se duplica (v constante), su Ec:", formula: "Ec = ½mv²", opts: ["Se duplica", "Se cuadruplica", "No cambia", "Se reduce"], ans: 0, hint: "Ec es directamente proporcional a m." }
+];
+
+let state = {
+  screen: 'welcome',
+  nombre: '',
+  qi: 0,
+  answered: false,
+  lastCorrect: false,
+  score: 0,
+  modScores: [0,0,0,0,0,0],
+  currentShuffledOpts: []
+};
+
+function $(id) { return document.getElementById(id); }
+
+// Función para mezclar opciones sin perder la correcta
+function shuffleOptions(q) {
+  let optsWithMetadata = q.opts.map((o, i) => ({ text: o, isCorrect: i === q.ans }));
+  for (let i = optsWithMetadata.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [optsWithMetadata[i], optsWithMetadata[j]] = [optsWithMetadata[j], optsWithMetadata[i]];
+  }
+  return optsWithMetadata;
+}
+
+function render() {
+  const app = $('app');
+  if (state.screen === 'welcome') renderWelcome(app);
+  else if (state.screen === 'quiz') renderQuiz(app);
+  else renderResults(app);
+}
+
+function renderWelcome(app) {
+  app.innerHTML = `
+    <div class="top-bar">
+      <div class="logo"><div class="logo-rocket">🚀</div>Misión Lanzamiento</div>
+      <div class="badge">Física y Matemática 2026</div>
+    </div>
+    <div class="welcome-hero">
+      <div class="rocket-icon">🚀</div>
+      <h1>¿Nave <span>lista?</span></h1>
+      <p>Sondeo de ideas previas. 18 preguntas aleatorizadas para comprobar el estado de tus sistemas.</p>
+    </div>
+    <div class="name-field-wrap">
+      <label>Tu nombre completo</label>
+      <input class="name-input" id="nameInput" type="text" placeholder="Ej: Ana García" />
+    </div>
+    <div class="modules-grid">
+      ${MODULES.map((m,i) => `<div class="mod-card"><div class="mod-card-num">Sistema ${i+1}</div><div class="mod-card-name">${m.icon} ${m.name}</div></div>`).join('')}
+    </div>
+    <button class="btn btn-primary" id="startBtn" onclick="startGame()" disabled>Iniciar Misión &rarr;</button>
+  `;
+  $('nameInput').addEventListener('input', (e) => $('startBtn').disabled = e.target.value.trim().length < 3);
+}
+
+function renderQuiz(app) {
+  const q = QUESTIONS[state.qi];
+  const mod = MODULES[q.mod];
+  const pct = (state.qi / QUESTIONS.length) * 100;
+
+  // Mezclar solo si no se ha respondido aún esta pregunta
+  if (!state.answered) {
+    state.currentShuffledOpts = shuffleOptions(q);
+  }
+
+  app.innerHTML = `
+    <div class="top-bar"><div class="logo">🚀 Misión</div><div class="badge">${state.nombre}</div></div>
+    <div class="systems-bar">
+      ${MODULES.map((m,i) => {
+        let cls = state.qi >= (i*3+3) ? 'done-ok' : (q.mod === i ? 'active' : '');
+        return `<div class="sys-pip ${cls}"></div>`;
+      }).join('')}
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="q-card">
+      <span class="q-module-tag tag-${mod.color}">${mod.icon} ${mod.name}</span>
+      <div style="font-size:18px; margin-bottom:1rem; line-height:1.4;">${q.text}</div>
+      ${q.formula ? `<div class="q-formula">${q.formula}</div>` : ''}
+      <div class="options">
+        ${state.currentShuffledOpts.map((opt, i) => `
+          <button class="opt-btn" id="opt${i}" onclick="handleAnswer(${i})">${opt.text}</button>
+        `).join('')}
+      </div>
+    </div>
+    ${state.answered ? `<div class="feedback ${state.lastCorrect ? 'ok' : 'ko'}"><strong>${state.lastCorrect ? '✓ Correcto' : '✗ Revisar'}</strong>${q.hint}</div>` : ''}
+    <div style="display:flex; justify-content:flex-end;">
+      ${state.answered ? `<button class="btn btn-primary" style="width:auto;" onclick="next()">${state.qi < QUESTIONS.length-1 ? 'Siguiente' : 'Ver Resultados'}</button>` : ''}
+    </div>
+  `;
+
+  if(state.answered) {
+    state.currentShuffledOpts.forEach((opt, i) => {
+      const btn = $(`opt${i}`);
+      btn.disabled = true;
+      if(opt.isCorrect) btn.classList.add('correct');
+      else if(i === state.lastChoiceIdx && !opt.isCorrect) btn.classList.add('wrong');
+    });
+  }
+}
+
+function renderResults(app) {
+  const pct = Math.round(state.score / QUESTIONS.length * 100);
+  app.innerHTML = `
+    <div class="results-card" style="text-align:center;">
+      <div class="global-num">${state.score} / ${QUESTIONS.length}</div>
+      <p style="color:var(--text2)">Puntuación Global (${pct}%)</p>
+    </div>
+    <div class="results-card">
+      ${MODULES.map((m,i) => {
+        const s = state.modScores[i];
+        return `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border);">
+          <span>${m.icon} ${m.name}</span>
+          <span style="font-weight:600; color:${s===3?'#22c55e':s===0?'#ef4444':'#f59e0b'};">${s}/3</span>
+        </div>`;
+      }).join('')}
+    </div>
+    <button class="btn btn-primary" onclick="window.print()">Guardar Informe (PDF)</button>
+    <button class="btn btn-ghost" onclick="location.reload()" style="margin-top:10px;">Reiniciar misión</button>
+  `;
+}
+
+function startGame() { state.nombre = $('nameInput').value; state.screen = 'quiz'; render(); }
+
+function handleAnswer(i) {
+  if (state.answered) return;
+  state.answered = true;
+  state.lastChoiceIdx = i;
+  state.lastCorrect = state.currentShuffledOpts[i].isCorrect;
+  if (state.lastCorrect) { 
+    state.score++; 
+    state.modScores[QUESTIONS[state.qi].mod]++; 
+  }
+  render();
+}
+
+function next() { state.qi++; state.answered = false; if(state.qi >= QUESTIONS.length) state.screen = 'results'; render(); }
+
+render();
+</script>
+</body>
+</html>
