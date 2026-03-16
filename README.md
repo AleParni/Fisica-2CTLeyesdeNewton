@@ -1,5 +1,8 @@
 # ⚡ Introducción a las Leyes de Newton
 
+[Trabajaremos con el siguiente simulador](https://aleparni.github.io/Fisica-2CTLeyesdeNewton/misionespacialv2.html)
+
+
 ## 📦 Primera Ley (Ley de Inercia)
 "Todo cuerpo permanece en reposo o movimiento rectilíneo uniforme a menos que una fuerza neta actúe sobre él."
 
