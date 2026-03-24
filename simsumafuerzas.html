@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Superposición de Fuerzas Concurrentes</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: #080C18;
+    color: #D8E0F0;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    flex-direction: column;
+  }
+  #header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #151C30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  #header .sub { font-size: 10px; letter-spacing: 4px; color: #4CC9F0; margin-bottom: 4px; }
+  #header h1 { font-size: 18px; color: #fff; letter-spacing: 0.5px; }
+  #badge {
+    background: #FF6B35; color: #fff; border-radius: 5px;
+    padding: 5px 12px; font-size: 10px; letter-spacing: 3px; font-weight: bold;
+  }
+  #tabs {
+    display: flex;
+    border-bottom: 1px solid #151C30;
+    padding: 0 24px;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: #445; cursor: pointer; padding: 10px 16px;
+    font-size: 10px; letter-spacing: 2px; font-family: monospace;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+  .tab-btn.active { color: #4CC9F0; border-bottom-color: #4CC9F0; }
+  #body {
+    flex: 1; padding: 20px 24px;
+    display: flex; gap: 18px; flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .panel {
+    background: #0A0E1C;
+    border: 1px solid #151C30;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .panel-header {
+    padding: 8px 14px;
+    border-bottom: 1px solid #151C30;
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap;
+  }
+  .panel-header span { font-size: 10px; color: #445; letter-spacing: 2px; flex: 1; }
+  .toggle-btn {
+    background: none;
+    border: 1px solid #1E2840;
+    color: #445; border-radius: 4px;
+    padding: 3px 9px; cursor: pointer;
+    font-size: 10px; letter-spacing: 1px; font-family: monospace;
+    transition: all 0.2s;
+  }
+  .toggle-btn.on { background: #152030; border-color: #4CC9F0; color: #4CC9F0; }
+  #svg-container { flex: 1 1 420px; }
+  #diagram-svg { display: block; width: 100%; touch-action: none; }
+  #controls { flex: 0 1 260px; display: flex; flex-direction: column; gap: 10px; }
+  .force-card {
+    background: #0B0F1C;
+    border-radius: 8px;
+    padding: 12px 14px;
+    border: 1px solid #222;
+  }
+  .force-card-header {
+    display: flex; justify-content: space-between;
+    margin-bottom: 10px; align-items: center;
+  }
+  .force-label { font-weight: bold; font-size: 13px; letter-spacing: 1px; }
+  .remove-btn {
+    background: none; border: none; color: #445;
+    cursor: pointer; font-size: 18px; line-height: 1; padding: 0;
+  }
+  .slider-row { margin-bottom: 8px; }
+  .slider-row-header {
+    display: flex; justify-content: space-between;
+    margin-bottom: 3px;
+  }
+  .slider-label { font-size: 10px; color: #556; letter-spacing: 1px; }
+  .slider-val { font-size: 11px; font-family: monospace; }
+  .slider-row input[type=range] { width: 100%; }
+  .comp-display {
+    font-size: 10px; color: #445; font-family: monospace;
+    display: flex; gap: 12px; margin-top: 4px;
+  }
+  #add-btn, #reset-btn {
+    background: none; border: 1px dashed #1E2840;
+    border-radius: 8px; color: #4CC9F0; cursor: pointer;
+    padding: 9px; font-size: 10px; letter-spacing: 2px;
+    font-family: monospace; width: 100%;
+    transition: all 0.2s;
+  }
+  #reset-btn {
+    border-color: #FF6B35;
+    color: #FF6B35;
+    margin-top: 4px;
+  }
+  #reset-btn:hover {
+    background: #FF6B3510;
+  }
+  #add-btn:hover {
+    background: #4CC9F010;
+  }
+  #result-box {
+    background: #0B0F1C;
+    border: 1px solid #ffffff18;
+    border-left: 3px solid #fff;
+    border-radius: 8px; padding: 14px;
+  }
+  #result-box .rlabel { font-size: 10px; color: #556; letter-spacing: 2px; margin-bottom: 10px; }
+  #result-mag { font-size: 26px; font-weight: bold; color: #fff; font-family: monospace; margin-bottom: 4px; }
+  #result-angle { font-size: 11px; color: #778; font-family: monospace; margin-bottom: 6px; }
+  #result-comps { font-size: 10px; color: #445; font-family: monospace; display: flex; gap: 10px; }
+  #equilibrium-badge {
+    display: none; margin-top: 10px;
+    background: #00C9A720; border: 1px solid #00C9A7;
+    border-radius: 4px; padding: 5px 10px;
+    font-size: 10px; color: #00C9A7; letter-spacing: 2px; font-weight: bold;
+  }
+
+  /* Theory tab */
+  #theory-content { flex: 1; max-width: 720px; display: flex; flex-direction: column; gap: 16px; }
+  .theory-card {
+    background: #0A0E1C;
+    border-radius: 10px;
+    padding: 18px 22px;
+    display: flex; gap: 16px;
+    border: 1px solid #1a1a2e;
+  }
+  .theory-num { font-size: 40px; font-weight: bold; opacity: 0.18; line-height: 1; min-width: 46px; padding-top: 2px; }
+  .theory-title { font-size: 13px; font-weight: bold; margin-bottom: 8px; letter-spacing: 0.5px; }
+  .theory-body { font-size: 12px; color: #8A9BBB; line-height: 1.75; margin-bottom: 12px; }
+  .theory-formula {
+    background: #060914; border-radius: 6px;
+    padding: 9px 14px; font-size: 12px; color: #D8E0F0;
+    font-family: monospace; letter-spacing: 0.5px;
+  }
+
+  /* Calc tab */
+  #calc-content { flex: 1; max-width: 660px; }
+  .calc-panel {
+    background: #0A0E1C; border: 1px solid #151C30;
+    border-radius: 10px; padding: 20px 24px;
+  }
+  .calc-header { font-size: 10px; color: #445; letter-spacing: 3px; margin-bottom: 20px; }
+  .step-label { font-size: 11px; color: #4CC9F0; letter-spacing: 2px; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th {
+    padding: 6px 8px; color: #445; font-weight: normal;
+    text-align: right; font-family: monospace; font-size: 10px;
+    border-bottom: 1px solid #151C30;
+  }
+  th:first-child { text-align: left; }
+  td { padding: 7px 8px; color: #8A9BBB; text-align: right; font-family: monospace; border-bottom: 1px solid #0C1020; }
+  td:first-child { text-align: left; font-weight: bold; }
+  .sum-row { display: flex; gap: 14px; margin-top: 12px; }
+  .sum-box {
+    flex: 1; background: #060914; border-radius: 8px;
+    padding: 12px 16px; border: 1px solid #151C30;
+  }
+  .sum-box .lbl { font-size: 10px; color: #445; margin-bottom: 6px; font-family: monospace; }
+  .sum-box .val { font-size: 22px; font-family: monospace; font-weight: bold; }
+  .final-box {
+    background: #060914; border-radius: 8px;
+    padding: 16px 20px; border: 1px solid #ffffff0C; margin-top: 12px;
+  }
+  .final-hint { font-family: monospace; font-size: 11px; color: #334; margin-bottom: 6px; }
+  .final-vals { display: flex; gap: 24px; align-items: flex-end; flex-wrap: wrap; margin-top: 14px; }
+  .final-val-box .lbl { font-size: 10px; color: #445; margin-bottom: 4px; }
+  .final-val-box .big { font-size: 28px; font-weight: bold; color: #fff; font-family: monospace; }
+  #eq-badge2 {
+    display: none;
+    background: #00C9A718; border: 1px solid #00C9A7;
+    border-radius: 6px; padding: 8px 14px;
+    color: #00C9A7; font-size: 11px; letter-spacing: 2px;
+    font-weight: bold; font-family: monospace;
+  }
+
+  .hidden { display: none !important; }
+  
+  @media (max-width: 768px) {
+    .final-val-box .big { font-size: 20px; }
+    .sum-box .val { font-size: 16px; }
+    #result-mag { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <div class="sub">MECÁNICA CLÁSICA · ESTÁTICA</div>
+    <h1>Superposición de Fuerzas Concurrentes</h1>
+  </div>
+  <div id="badge">INTERACTIVO</div>
+</div>
+
+<div id="tabs">
+  <button class="tab-btn active" onclick="switchTab('diagram')">01 · DIAGRAMA</button>
+  <button class="tab-btn" onclick="switchTab('theory')">02 · TEORÍA</button>
+  <button class="tab-btn" onclick="switchTab('calc')">03 · CÁLCULO</button>
+</div>
+
+<div id="body">
+
+  <!-- DIAGRAM TAB -->
+  <div id="tab-diagram" style="display:flex; gap:18px; flex-wrap:wrap; width:100%; align-items:flex-start;">
+
+    <div class="panel" id="svg-container">
+      <div class="panel-header">
+        <span>DIAGRAMA VECTORIAL</span>
+        <button class="toggle-btn on" id="btn-comps" onclick="toggleComps()">Componentes</button>
+        <button class="toggle-btn" id="btn-poly" onclick="togglePoly()">Polígono</button>
+      </div>
+      <svg id="diagram-svg" viewBox="0 0 500 420"></svg>
+    </div>
+
+    <div id="controls">
+      <div id="force-cards"></div>
+      <button id="add-btn" onclick="addForce()">+ AGREGAR FUERZA</button>
+      <button id="reset-btn" onclick="resetForces()">↺ RESTABLECER EJEMPLO</button>
+      <div id="result-box">
+        <div class="rlabel">RESULTANTE</div>
+        <div id="result-mag">0.000 N</div>
+        <div id="result-angle">θ = 0.00°</div>
+        <div id="result-comps"><span>Rx=0</span><span>Ry=0</span></div>
+        <div id="equilibrium-badge">⚖ SISTEMA EN EQUILIBRIO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THEORY TAB -->
+  <div id="tab-theory" class="hidden" style="width:100%;">
+    <div id="theory-content">
+      <div class="theory-card" style="border-left:4px solid #FF6B35">
+        <div class="theory-num" style="color:#FF6B35">01</div>
+        <div>
+          <div class="theory-title" style="color:#FF6B35">Principio de Superposición</div>
+          <div class="theory-body">Cuando dos o más fuerzas actúan simultáneamente sobre un mismo punto, el efecto total es idéntico al de una única fuerza resultante, obtenida como la suma vectorial de todas las fuerzas del sistema.</div>
+          <div class="theory-formula">R⃗ = F⃗₁ + F⃗₂ + ··· + F⃗ₙ = Σ F⃗ᵢ</div>
+        </div>
+      </div>
+      <div class="theory-card" style="border-left:4px solid #00C9A7">
+        <div class="theory-num" style="color:#00C9A7">02</div>
+        <div>
+          <div class="theory-title" style="color:#00C9A7">Fuerzas Concurrentes</div>
+          <div class="theory-body">Se denominan concurrentes aquellas fuerzas cuyas líneas de acción se intersectan en un único punto común. Ese punto puede ser el de aplicación física o un punto geométrico sobre las prolongaciones de los vectores.</div>
+          <div class="theory-formula">Todas las F⃗ᵢ tienen su línea de acción pasando por O</div>
+        </div>
+      </div>
+      <div class="theory-card" style="border-left:4px solid #845EC2">
+        <div class="theory-num" style="color:#845EC2">03</div>
+        <div>
+          <div class="theory-title" style="color:#845EC2">Descomposición Cartesiana</div>
+          <div class="theory-body">Toda fuerza se descompone en componentes ortogonales. La suma algebraica por eje da las componentes de la resultante, de las que se reconstruye módulo y dirección.</div>
+          <div class="theory-formula">Fx = F·cos(θ)   Fy = F·sin(θ)   |R| = √(Rx² + Ry²)</div>
+        </div>
+      </div>
+      <div class="theory-card" style="border-left:4px solid #F9C74F">
+        <div class="theory-num" style="color:#F9C74F">04</div>
+        <div>
+          <div class="theory-title" style="color:#F9C74F">Equilibrio Estático</div>
+          <div class="theory-body">El sistema está en equilibrio cuando la resultante es nula. Esto equivale a que la suma de componentes en cada eje sea cero — base de las ecuaciones de equilibrio de la partícula.</div>
+          <div class="theory-formula">Σ Fxi = 0   ∧   Σ Fyi = 0   ⟹   R⃗ = 0⃗</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALC TAB -->
+  <div id="tab-calc" class="hidden" style="width:100%;">
+    <div id="calc-content">
+      <div class="calc-panel">
+        <div class="calc-header">RESOLUCIÓN PASO A PASO · valores actualizados en tiempo real</div>
+
+        <div class="step-label">PASO 1 · DESCOMPOSICIÓN EN COMPONENTES</div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th style="text-align:left"></th>
+                <th>F (N)</th>
+                <th>θ (°)</th>
+                <th>Fx = F·cos θ</th>
+                <th>Fy = F·sin θ</th>
+              </tr>
+            </thead>
+            <tbody id="calc-tbody"></tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:20px; margin-bottom:4px;" class="step-label">PASO 2 · SUMA DE COMPONENTES</div>
+        <div class="sum-row">
+          <div class="sum-box">
+            <div class="lbl">Rx = Σ Fxi</div>
+            <div class="val" id="calc-rx">+0.0000</div>
+          </div>
+          <div class="sum-box">
+            <div class="lbl">Ry = Σ Fyi</div>
+            <div class="val" id="calc-ry">+0.0000</div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; margin-bottom:4px;" class="step-label">PASO 3 · MÓDULO Y DIRECCIÓN</div>
+        <div class="final-box">
+          <div class="final-hint" id="calc-hint1"></div>
+          <div class="final-hint" id="calc-hint2"></div>
+          <div class="final-vals">
+            <div class="final-val-box">
+              <div class="lbl">MÓDULO</div>
+              <div class="big" id="calc-mag">0.0000 N</div>
+            </div>
+            <div class="final-val-box">
+              <div class="lbl">DIRECCIÓN</div>
+              <div class="big" id="calc-ang">0.00°</div>
+            </div>
+            <div id="eq-badge2">⚖ EQUILIBRIO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const PALETTE = ["#FF6B35","#00C9A7","#845EC2","#F9C74F","#4CC9F0"];
+const SCALE = 65, CX = 250, CY = 210;
+let nextId = 4;
+let showComps = true;
+let showPoly = false;
+let draggingId = null;
+const EQUILIBRIUM_THRESHOLD = 0.01; // Mejor precisión
+
+let forces = [
+  { id:1, mag:3.0, angle:30  },
+  { id:2, mag:2.0, angle:130 },
+  { id:3, mag:2.5, angle:240 },
+];
+
+function toRad(d){ return d * Math.PI / 180; }
+function toDeg(r){ return r * 180 / Math.PI; }
+function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+function fmt(v,d){ return (v>=0?"+":"")+v.toFixed(d); }
+
+// Función mejorada para obtener ángulo en el rango correcto (-180° a 180°)
+function getNormalizedAngle(angleDeg) {
+  let normalized = angleDeg % 360;
+  if (normalized > 180) normalized -= 360;
+  if (normalized <= -180) normalized += 360;
+  return normalized;
+}
+
+// Función para formatear ángulo mostrando valores negativos cuando corresponde
+function formatAngle(angleDeg) {
+  const normalized = getNormalizedAngle(angleDeg);
+  return normalized.toFixed(2) + "°";
+}
+
+// SVG helpers
+const SVG_NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs){
+  const e = document.createElementNS(SVG_NS, tag);
+  for(const [k,v] of Object.entries(attrs)) e.setAttribute(k,v);
+  return e;
+}
+
+function makeArrow(x1,y1,x2,y2,color,sw,dashed,label){
+  const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+  if(len<4) return null;
+  const ux=dx/len, uy=dy/len;
+  const hl=clamp(len*0.22,8,16), hw=hl*0.42;
+  const hbx=x2-ux*hl, hby=y2-uy*hl;
+  const g=el("g",{});
+  const line=el("line",{
+    x1:x1+ux*4, y1:y1+uy*4, x2:hbx, y2:hby,
+    stroke:color, "stroke-width":sw,
+  });
+  if(dashed) line.setAttribute("stroke-dasharray","6 4");
+  g.appendChild(line);
+  const head=el("polygon",{
+    points:`${x2},${y2} ${hbx-uy*hw},${hby+ux*hw} ${hbx+uy*hw},${hby-ux*hw}`,
+    fill:color
+  });
+  g.appendChild(head);
+  if(label){
+    const lx=(x1+x2)/2-uy*16, ly=(y1+y2)/2+ux*16;
+    const t=el("text",{
+      x:lx,y:ly,fill:color,"font-size":"12",
+      "font-family":"monospace","text-anchor":"middle",
+      "dominant-baseline":"middle","font-weight":"bold"
+    });
+    t.textContent=label;
+    g.appendChild(t);
+  }
+  return g;
+}
+
+function makeArc(cx,cy,angleDeg,radius,color){
+  const a=toRad(-angleDeg);
+  const x2=cx+radius*Math.cos(a);
+  const y2=cy+radius*Math.sin(a);
+  const large=Math.abs(angleDeg)>180?1:0;
+  const sweep=angleDeg<0?1:0;
+  const midA=toRad(-angleDeg/2);
+  const tx=cx+(radius+13)*Math.cos(midA);
+  const ty=cy+(radius+13)*Math.sin(midA);
+  const g=el("g",{});
+  const path=el("path",{
+    d:`M ${cx+radius} ${cy} A ${radius} ${radius} 0 ${large} ${sweep} ${x2} ${y2}`,
+    fill:"none",stroke:color,"stroke-width":"1.5",opacity:"0.65"
+  });
+  g.appendChild(path);
+  const t=el("text",{
+    x:tx,y:ty,fill:color,"font-size":"10","font-family":"monospace",
+    "text-anchor":"middle","dominant-baseline":"middle",opacity:"0.9"
+  });
+  t.textContent=Math.abs(angleDeg).toFixed(0)+"°";
+  g.appendChild(t);
+  return g;
+}
+
+// Render SVG
+function renderSVG(){
+  const svg = document.getElementById("diagram-svg");
+  svg.innerHTML="";
+
+  // grid
+  for(let i=1;i<20;i++){
+    svg.appendChild(el("line",{x1:i*25,y1:0,x2:i*25,y2:420,stroke:"#10152A","stroke-width":"1"}));
+    svg.appendChild(el("line",{x1:0,y1:i*25,x2:500,y2:i*25,stroke:"#10152A","stroke-width":"1"}));
+  }
+  // axes
+  svg.appendChild(el("line",{x1:CX,y1:16,x2:CX,y2:404,stroke:"#1A2540","stroke-width":"1.5"}));
+  svg.appendChild(el("line",{x1:16,y1:CY,x2:484,y2:CY,stroke:"#1A2540","stroke-width":"1.5"}));
+  // axis arrows
+  svg.appendChild(el("polygon",{points:`${CX},12 ${CX-4},22 ${CX+4},22`,fill:"#1A2540"}));
+  svg.appendChild(el("polygon",{points:`488,${CY} 478,${CY-4} 478,${CY+4}`,fill:"#1A2540"}));
+  const ty=el("text",{x:CX+6,y:22,fill:"#2A3550","font-size":"10","font-family":"monospace"});
+  ty.textContent="Y"; svg.appendChild(ty);
+  const tx=el("text",{x:478,y:CY-6,fill:"#2A3550","font-size":"10","font-family":"monospace"});
+  tx.textContent="X"; svg.appendChild(tx);
+
+  // resultant
+  const R = forces.reduce((a,f)=>({x:a.x+f.mag*Math.cos(toRad(f.angle)),y:a.y+f.mag*Math.sin(toRad(f.angle))}),{x:0,y:0});
+  const rMag = Math.sqrt(R.x*R.x+R.y*R.y);
+  let rAng = toDeg(Math.atan2(R.y,R.x));
+  if (Math.abs(R.x) < EQUILIBRIUM_THRESHOLD && Math.abs(R.y) < EQUILIBRIUM_THRESHOLD) {
+    rAng = 0;
+  }
+
+  // polygon
+  if(showPoly){
+    let px=CX,py=CY;
+    for(let i=0;i<forces.length;i++){
+      const f=forces[i];
+      const nx=px+f.mag*SCALE*Math.cos(toRad(f.angle));
+      const ny=py+f.mag*SCALE*Math.sin(toRad(f.angle));
+      const arr=makeArrow(px,py,nx,ny,PALETTE[i%PALETTE.length],1.5,true,null);
+      if(arr) svg.appendChild(arr);
+      px=nx; py=ny;
+    }
+    if(rMag>EQUILIBRIUM_THRESHOLD){
+      svg.appendChild(el("line",{
+        x1:CX,y1:CY,x2:px,y2:py,
+        stroke:"#ffffff",opacity:"0.15","stroke-width":"1","stroke-dasharray":"3 3"
+      }));
+    }
+  }
+
+  // components
+  if(showComps){
+    forces.forEach((f,i)=>{
+      const ex=CX+f.mag*SCALE*Math.cos(toRad(f.angle));
+      const ey=CY+f.mag*SCALE*Math.sin(toRad(f.angle));
+      const c=PALETTE[i%PALETTE.length];
+      const g=el("g",{opacity:"0.35"});
+      g.appendChild(el("line",{x1:CX,y1:CY,x2:ex,y2:CY,stroke:c,"stroke-width":"1","stroke-dasharray":"4 3"}));
+      g.appendChild(el("line",{x1:ex,y1:CY,x2:ex,y2:ey,stroke:c,"stroke-width":"1","stroke-dasharray":"4 3"}));
+      svg.appendChild(g);
+    });
+  }
+
+  // resultant arrow
+  if(rMag>EQUILIBRIUM_THRESHOLD){
+    const arr=makeArrow(CX,CY,CX+R.x*SCALE,CY+R.y*SCALE,"#FFFFFF",3,false,`R = ${rMag.toFixed(2)} N`);
+    if(arr) svg.appendChild(arr);
+    svg.appendChild(makeArc(CX,CY,rAng,40,"#AAAAAA"));
+  }
+
+  // individual forces - puntos de arrastre más grandes para móviles
+  forces.forEach((f,i)=>{
+    const c=PALETTE[i%PALETTE.length];
+    const ex=CX+f.mag*SCALE*Math.cos(toRad(f.angle));
+    const ey=CY+f.mag*SCALE*Math.sin(toRad(f.angle));
+    const arr=makeArrow(CX,CY,ex,ey,c,2.5,false,`F${i+1} = ${f.mag.toFixed(1)}`);
+    if(arr) svg.appendChild(arr);
+    svg.appendChild(makeArc(CX,CY,f.angle,22+i*10,c));
+    // drag handle - más grande para mejor experiencia táctil
+    const outer=el("circle",{cx:ex,cy:ey,r:"12",fill:c,opacity:"0.2",cursor:"grab"});
+    outer.dataset.fid=f.id;
+    outer.addEventListener("mousedown",startDrag);
+    outer.addEventListener("touchstart",startDragTouch,{passive:false});
+    svg.appendChild(outer);
+    const inner=el("circle",{cx:ex,cy:ey,r:"5",fill:c,cursor:"grab"});
+    inner.dataset.fid=f.id;
+    inner.addEventListener("mousedown",startDrag);
+    inner.addEventListener("touchstart",startDragTouch,{passive:false});
+    svg.appendChild(inner);
+  });
+
+  // origin
+  svg.appendChild(el("circle",{cx:CX,cy:CY,r:"5",fill:"#fff"}));
+  svg.appendChild(el("circle",{cx:CX,cy:CY,r:"2",fill:"#080C18"}));
+
+  const hint=el("text",{x:"10",y:"414",fill:"#1E2840","font-size":"9","font-family":"monospace"});
+  hint.textContent="Arrastrá los puntos para modificar magnitud y ángulo";
+  svg.appendChild(hint);
+
+  // update result panel
+  const displayAngle = formatAngle(rAng);
+  document.getElementById("result-mag").textContent=rMag.toFixed(3)+" N";
+  document.getElementById("result-angle").textContent="θ = "+displayAngle;
+  document.getElementById("result-comps").innerHTML=
+    `<span>Rx=${R.x.toFixed(3)}</span><span>Ry=${R.y.toFixed(3)}</span>`;
+  const isEquilibrium = rMag < EQUILIBRIUM_THRESHOLD;
+  document.getElementById("equilibrium-badge").style.display=isEquilibrium?"block":"none";
+
+  // update calc tab
+  updateCalc(R,rMag,rAng);
+}
+
+function updateCalc(R,rMag,rAng){
+  const tbody=document.getElementById("calc-tbody");
+  tbody.innerHTML="";
+  forces.forEach((f,i)=>{
+    const fx=f.mag*Math.cos(toRad(f.angle));
+    const fy=f.mag*Math.sin(toRad(f.angle));
+    const c=PALETTE[i%PALETTE.length];
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td style="color:${c}">F${i+1}</td>
+      <td>${f.mag.toFixed(2)}</td>
+      <td>${f.angle.toFixed(1)}</td>
+      <td style="color:${fx<0?'#FF6B35':'#8A9BBB'}">${fmt(fx,4)}</td>
+      <td style="color:${fy<0?'#FF6B35':'#8A9BBB'}">${fmt(fy,4)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  const rxEl=document.getElementById("calc-rx");
+  const ryEl=document.getElementById("calc-ry");
+  rxEl.textContent=fmt(R.x,4);
+  ryEl.textContent=fmt(R.y,4);
+  rxEl.style.color=Math.abs(R.x)<EQUILIBRIUM_THRESHOLD?"#00C9A7":"#D8E0F0";
+  ryEl.style.color=Math.abs(R.y)<EQUILIBRIUM_THRESHOLD?"#00C9A7":"#D8E0F0";
+  
+  // Mejor manejo de ángulo cuando Rx es 0
+  let angleHint = "";
+  if (Math.abs(R.x) < EQUILIBRIUM_THRESHOLD && Math.abs(R.y) > EQUILIBRIUM_THRESHOLD) {
+    angleHint = `θ = ${R.y > 0 ? '90°' : '-90°'} (vertical pura)`;
+  } else {
+    angleHint = `θ = arctan( ${R.y.toFixed(3)} / ${R.x.toFixed(3)} )`;
+  }
+  
+  document.getElementById("calc-hint1").textContent=
+    `|R| = √( (${R.x.toFixed(3)})² + (${R.y.toFixed(3)})² )`;
+  document.getElementById("calc-hint2").textContent= angleHint;
+  document.getElementById("calc-mag").textContent=rMag.toFixed(4)+" N";
+  
+  const displayAngle = formatAngle(rAng);
+  document.getElementById("calc-ang").textContent=displayAngle;
+  
+  const isEquilibrium = rMag < EQUILIBRIUM_THRESHOLD;
+  document.getElementById("eq-badge2").style.display=isEquilibrium?"block":"none";
+}
+
+// Force cards
+function renderCards(){
+  const container=document.getElementById("force-cards");
+  container.innerHTML="";
+  forces.forEach((f,i)=>{
+    const c=PALETTE[i%PALETTE.length];
+    const fx=(f.mag*Math.cos(toRad(f.angle))).toFixed(3);
+    const fy=(f.mag*Math.sin(toRad(f.angle))).toFixed(3);
+    const card=document.createElement("div");
+    card.className="force-card";
+    card.style.borderLeft=`3px solid ${c}`;
+    card.style.borderColor=`${c}30`;
+    card.style.borderLeftColor=c;
+    card.innerHTML=`
+      <div class="force-card-header">
+        <span class="force-label" style="color:${c}">F${i+1}</span>
+        ${forces.length>2?`<button class="remove-btn" onclick="removeForce(${f.id})">×</button>`:""}
+      </div>
+      <div class="slider-row">
+        <div class="slider-row-header">
+          <span class="slider-label">MAGNITUD</span>
+          <span class="slider-val" style="color:${c}" id="mag-val-${f.id}">${f.mag.toFixed(2)} N</span>
+        </div>
+        <input type="range" min="0.5" max="4.5" step="0.05" value="${f.mag}" data-fid="${f.id}" data-type="mag"
+          style="accent-color:${c}"
+          oninput="updateMag(${f.id},this.value)">
+      </div>
+      <div class="slider-row">
+        <div class="slider-row-header">
+          <span class="slider-label">ÁNGULO</span>
+          <span class="slider-val" style="color:${c}" id="ang-val-${f.id}">${f.angle.toFixed(1)}°</span>
+        </div>
+        <input type="range" min="0" max="359" step="1" value="${f.angle}" data-fid="${f.id}" data-type="ang"
+          style="accent-color:${c}"
+          oninput="updateAng(${f.id},this.value)">
+      </div>
+      <div class="comp-display">
+        <span id="fx-${f.id}">Fx=${fx>=0?"+":""}${fx}</span>
+        <span id="fy-${f.id}">Fy=${fy>=0?"+":""}${fy}</span>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+  document.getElementById("add-btn").style.display=forces.length>=5?"none":"block";
+}
+
+function updateMag(id,val){
+  forces=forces.map(f=>f.id===id?{...f,mag:parseFloat(val)}:f);
+  const f=forces.find(x=>x.id===id);
+  document.getElementById("mag-val-"+id).textContent=f.mag.toFixed(2)+" N";
+  const fx=(f.mag*Math.cos(toRad(f.angle))).toFixed(3);
+  const fy=(f.mag*Math.sin(toRad(f.angle))).toFixed(3);
+  document.getElementById("fx-"+id).textContent="Fx="+(fx>=0?"+":"")+fx;
+  document.getElementById("fy-"+id).textContent="Fy="+(fy>=0?"+":"")+fy;
+  renderSVG();
+}
+
+function updateAng(id,val){
+  forces=forces.map(f=>f.id===id?{...f,angle:parseFloat(val)}:f);
+  const f=forces.find(x=>x.id===id);
+  document.getElementById("ang-val-"+id).textContent=f.angle.toFixed(1)+"°";
+  const fx=(f.mag*Math.cos(toRad(f.angle))).toFixed(3);
+  const fy=(f.mag*Math.sin(toRad(f.angle))).toFixed(3);
+  document.getElementById("fx-"+id).textContent="Fx="+(fx>=0?"+":"")+fx;
+  document.getElementById("fy-"+id).textContent="Fy="+(fy>=0?"+":"")+fy;
+  renderSVG();
+}
+
+function addForce(){
+  if(forces.length>=5) return;
+  forces.push({id:nextId++, mag:2.0, angle:Math.round(Math.random()*359)});
+  renderCards();
+  renderSVG();
+}
+
+function removeForce(id){
+  if(forces.length<=2) return;
+  forces=forces.filter(f=>f.id!==id);
+  renderCards();
+  renderSVG();
+}
+
+function resetForces(){
+  forces = [
+    { id:1, mag:3.0, angle:30  },
+    { id:2, mag:2.0, angle:130 },
+    { id:3, mag:2.5, angle:240 },
+  ];
+  nextId = 4;
+  renderCards();
+  renderSVG();
+}
+
+// Drag handling
+function svgPoint(clientX,clientY){
+  const svg=document.getElementById("diagram-svg");
+  const rect=svg.getBoundingClientRect();
+  let x = (clientX-rect.left)*(500/rect.width);
+  let y = (clientY-rect.top)*(420/rect.height);
+  x = clamp(x, 0, 500);
+  y = clamp(y, 0, 420);
+  return {x,y};
+}
+
+function applyDrag(clientX,clientY){
+  if(draggingId===null) return;
+  const p=svgPoint(clientX,clientY);
+  const dx=p.x-CX, dy=p.y-CY;
+  const dist=Math.sqrt(dx*dx+dy*dy);
+  const mag=clamp(dist/SCALE,0.5,4.5);
+  let angle = toDeg(Math.atan2(dy,dx));
+  angle = ((angle % 360) + 360) % 360;
+  forces=forces.map(f=>f.id===draggingId?{...f,mag:parseFloat(mag.toFixed(2)),angle:parseFloat(angle.toFixed(1))}:f);
+  renderSVG();
+  const f=forces.find(x=>x.id===draggingId);
+  if(!f) return;
+  const magEl=document.getElementById("mag-val-"+f.id);
+  const angEl=document.getElementById("ang-val-"+f.id);
+  if(magEl) magEl.textContent=f.mag.toFixed(2)+" N";
+  if(angEl) angEl.textContent=f.angle.toFixed(1)+"°";
+  // update sliders
+  const idx=forces.findIndex(fx=>fx.id===draggingId);
+  const allSliders=document.querySelectorAll("#force-cards input[type=range]");
+  if(allSliders[idx*2]) allSliders[idx*2].value=f.mag;
+  if(allSliders[idx*2+1]) allSliders[idx*2+1].value=f.angle;
+}
+
+function startDrag(e){
+  e.preventDefault();
+  draggingId=parseInt(e.currentTarget.dataset.fid);
+}
+
+function startDragTouch(e){
+  e.preventDefault();
+  draggingId=parseInt(e.currentTarget.dataset.fid);
+}
+
+document.addEventListener("mousemove",e=>{ if(draggingId!==null){ applyDrag(e.clientX,e.clientY); }});
+document.addEventListener("mouseup",()=>{ draggingId=null; });
+document.addEventListener("touchmove",e=>{
+  if(draggingId!==null && e.touches.length>0){
+    applyDrag(e.touches[0].clientX,e.touches[0].clientY);
+  }
+},{passive:false});
+document.addEventListener("touchend",()=>{ draggingId=null; });
+
+// Toggles
+function toggleComps(){
+  showComps=!showComps;
+  document.getElementById("btn-comps").className="toggle-btn"+(showComps?" on":"");
+  renderSVG();
+}
+function togglePoly(){
+  showPoly=!showPoly;
+  document.getElementById("btn-poly").className="toggle-btn"+(showPoly?" on":"");
+  renderSVG();
+}
+
+// Tabs
+function switchTab(id){
+  ["diagram","theory","calc"].forEach(t=>{
+    document.getElementById("tab-"+t).classList.toggle("hidden",t!==id);
+  });
+  document.querySelectorAll(".tab-btn").forEach((btn,i)=>{
+    btn.classList.toggle("active",["diagram","theory","calc"][i]===id);
+  });
+}
+
+// Init
+renderCards();
+renderSVG();
+</script>
+</body>
+</html>
