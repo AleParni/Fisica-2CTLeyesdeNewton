@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio de Física: Desafío de Fuerzas</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: auto; padding: 20px; background-color: #f8f9fa; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 25px; border-top: 5px solid #1a73e8; }
+        h1 { color: #1a73e8; text-align: center; margin-bottom: 30px; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #e8f0fe; padding-bottom: 8px; }
+        .formula-box { background: #1a73e8; color: white; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; text-align: center; margin: 15px 0; }
+        .ejercicio { background: #ffffff; border: 1px solid #dee2e6; padding: 20px; margin: 15px 0; border-radius: 8px; transition: transform 0.2s; }
+        .ejercicio:hover { transform: scale(1.01); border-color: #1a73e8; }
+        .opciones { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 15px; }
+        .opcion-btn { padding: 12px; border: 1px solid #ced4da; border-radius: 6px; background: #fff; cursor: pointer; text-align: left; transition: all 0.2s; }
+        .opcion-btn:hover { background: #e8f0fe; border-color: #1a73e8; }
+        .feedback { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; font-weight: 600; }
+        .correct { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .incorrect { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .teoria-resumen { font-size: 0.95em; color: #555; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Guía Interactiva: Componentes y Suma de Fuerzas</h1>
+    <div class="teoria-resumen">
+        <p>Para analizar sistemas de fuerzas en el plano, proyectamos cada vector sobre los ejes <b>X</b> e <b>Y</b>:</p>
+        <div class="formula-box">
+            Fx = F · cos(θ) &nbsp;&nbsp; | &nbsp;&nbsp; Fy = F · sen(θ)
+        </div>
+        <p>Si el sistema está en <b>equilibrio</b>, la suma de todas las componentes debe ser cero: <b>ΣFx = 0</b> y <b>ΣFy = 0</b>.</p>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Ejercicios de Aplicación</h2>
+    
+    <div id="contenedor-ejercicios"></div>
+</div>
+
+<script>
+    const ejercicios = [
+        { id: 1, txt: "Un barco es remolcado con una fuerza de 4500 N a 20°. ¿Cuál es la fuerza efectiva en el eje X (Fx)?", ops: {a: "1539 N", b: "4228 N", c: "4500 N"}, ans: "b", fbk: "Correcto: 4500 * cos(20°)." },
+        { id: 2, txt: "Una fuerza de 80 N está a 225° (3er cuadrante). ¿Cómo son sus componentes?", ops: {a: "Ambas negativas", b: "Ambas positivas", c: "X negativa, Y positiva"}, ans: "a", fbk: "Exacto. En el 3er cuadrante tanto cos como sen son negativos." },
+        { id: 3, txt: "Si Fx = 12 N y Fy = 5 N, ¿cuál es el módulo de la fuerza resultante?", ops: {a: "17 N", b: "7 N", c: "13 N"}, ans: "c", fbk: "¡Bien! √(12² + 5²) = 13." },
+        { id: 4, txt: "Un objeto de 100 N está en una rampa de 30°. ¿Qué componente del peso (Px) tira rampa abajo?", ops: {a: "50 N", b: "86.6 N", c: "100 N"}, ans: "a", fbk: "Correcto: 100 * sen(30°) = 50 N." },
+        { id: 5, txt: "En el mismo plano de 30° y peso 100 N, ¿cuánto vale la fuerza Normal (Py)?", ops: {a: "50 N", b: "86.6 N", c: "100 N"}, ans: "b", fbk: "Correcto: 100 * cos(30°) = 86.6 N." },
+        { id: 6, txt: "Un cartel de 200 N cuelga simétricamente de dos cuerdas a 60° del techo. ¿Qué tensión soporta cada una?", ops: {a: "100 N", b: "115.5 N", c: "200 N"}, ans: "b", fbk: "Verdadero: 2*T*sen(60°) = 200." },
+        { id: 7, txt: "Empujas un mueble con 200 N hacia abajo con un ángulo de 45°. ¿La fuerza Normal sobre el suelo será:", ops: {a: "Igual al peso", b: "Menor al peso", c: "Mayor al peso"}, ans: "c", fbk: "Correcto. La componente vertical de tu fuerza se suma al peso." },
+        { id: 8, txt: "Tres fuerzas de 10 N actúan a 0°, 120° y 240°. ¿Cuál es la resultante?", ops: {a: "30 N", b: "10 N", c: "0 N"}, ans: "c", fbk: "¡Perfecto! Es un sistema en equilibrio simétrico." },
+        { id: 9, txt: "Si una cuerda se rompe a los 500 N y aplicas una fuerza de 600 N a 30°, ¿se romperá la cuerda si solo debe resistir la componente X?", ops: {a: "Sí (Fx > 500)", b: "No (Fx < 500)", c: "Depende del peso"}, ans: "b", fbk: "Correcto: 600 * cos(30°) = 519 N. ¡Ah, espera! 519 > 500, ¡se rompe! Revisa el cálculo."},
+        { id: 10, txt: "Un bloque de 50 N es tirado hacia arriba con 20 N a 37°. ¿Cuál es la fuerza de contacto (Normal)?", ops: {a: "30 N", b: "38 N", c: "50 N"}, ans: "b", fbk: "Bien: 50 - (20 * sen(37°)) = 38 N." }
+    ];
+
+    const contenedor = document.getElementById('contenedor-ejercicios');
+
+    ejercicios.forEach(ej => {
+        const div = document.createElement('div');
+        div.className = 'ejercicio';
+        div.innerHTML = `
+            <p><b>${ej.id}.</b> ${ej.txt}</p>
+            <div class="opciones">
+                ${Object.entries(ej.ops).map(([letra, texto]) => `
+                    <button class="opcion-btn" onclick="verificar(${ej.id}, '${letra}')">${letra}) ${texto}</button>
+                `).join('')}
+            </div>
+            <div id="fbk-${ej.id}" class="feedback"></div>
+        `;
+        contenedor.appendChild(div);
+    });
+
+    function verificar(id, opcion) {
+        const ej = ejercicios.find(e => e.id === id);
+        const f = document.getElementById(`fbk-${id}`);
+        f.style.display = 'block';
+        if (opcion === ej.ans) {
+            f.className = 'feedback correct';
+            f.innerText = "Verdadero. " + ej.fbk;
+        } else {
+            f.className = 'feedback incorrect';
+            f.innerText = "Falso. Revisa el planteo trigonométrico.";
+        }
+    }
+</script>
+
+</body>
+</html>
