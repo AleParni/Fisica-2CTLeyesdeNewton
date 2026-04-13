@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Logaritmos: Historia, Física y Gráficos de Escala | Material didáctico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f2e8;
+            font-family: 'Segoe UI', 'Roboto', 'Georgia', serif;
+            line-height: 1.55;
+            color: #1e2a1e;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fffef7;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 2rem 2rem 2.5rem;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            background: linear-gradient(135deg, #2b5e2f, #5a9e4e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.9rem;
+            margin-top: 1.8rem;
+            margin-bottom: 1rem;
+            color: #2c5e2a;
+            border-left: 6px solid #6fbf4c;
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 1.2rem 0 0.8rem;
+            color: #3c7840;
+        }
+
+        .historia, .caja-propiedades, .ejercicios, .graf-box {
+            background: #fefaf0;
+            border-radius: 28px;
+            padding: 1.2rem 1.8rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e2e0c8;
+        }
+
+        .badge {
+            background: #2e7d32;
+            color: white;
+            font-size: 0.75rem;
+            border-radius: 60px;
+            padding: 4px 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .formula {
+            background: #eef5e9;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 14px;
+            display: inline-block;
+            margin: 8px 0;
+            font-size: 1.1rem;
+        }
+
+        .prop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .prop-card {
+            background: white;
+            border-left: 5px solid #6fbf4c;
+            padding: 0.8rem;
+            border-radius: 18px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .ejercicio-item {
+            background: #ffffffd9;
+            margin: 1rem 0;
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            border: 1px solid #cfdfc7;
+        }
+
+        button {
+            background: #3c8c40;
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #1f5722;
+        }
+
+        .respuesta {
+            background: #f1f9ea;
+            margin-top: 10px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-family: monospace;
+            display: none;
+        }
+
+        .ejemplo-grafico {
+            background: #eef3e6;
+            padding: 1rem;
+            border-radius: 24px;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            border: 1px solid #c2d6b0;
+            padding: 8px 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #cfe3c2;
+        }
+
+        .nota {
+            background: #fff2cf;
+            border-left: 5px solid #e6b422;
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            margin: 1rem 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            font-size: 0.85rem;
+            color: #6a6e4d;
+            border-top: 1px solid #dbdfc7;
+            padding-top: 1.5rem;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 1.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📐 Logaritmos: historia, potencia en Física y gráficos de escala</h1>
+    <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">¿Por qué los científicos usan escalas logarítmicas? ¿Cómo convertir una relación complicada en una línea recta? Aprende desde cero.</p>
+
+    <!-- Historia -->
+    <div class="historia">
+        <div class="badge">📜 BREVE HISTORIA</div>
+        <h2 style="margin-top: 0;">🧙‍♂️ John Napier y los logaritmos (1614)</h2>
+        <p>El matemático escocés <strong>John Napier</strong> (1550-1617) inventó los logaritmos para simplificar cálculos astronómicos. Su idea: convertir multiplicaciones en sumas. <br>
+        Más tarde, <strong>Henry Briggs</strong> propuso los <strong>logaritmos de base 10</strong> (log₁₀), también llamados <strong>logaritmos decimales</strong>, ideales para trabajar con potencias de 10. <br>
+        El <strong>logaritmo natural o neperiano</strong> (ln) usa como base el número <em>e ≈ 2.718</em> y aparece en procesos de crecimiento, decaimiento radiactivo y fenómenos naturales.</p>
+        <p><strong>Curiosidad:</strong> Antes de las calculadoras, los logaritmos permitían multiplicar números enormes usando tablas. ¡Fueron el "Google" del siglo XVII!</p>
+    </div>
+
+    <!-- Utilidad en Física -->
+    <h2>⚛️ Utilidad de los logaritmos de base 10 en Física</h2>
+    <div class="caja-propiedades">
+        <p>En Física trabajamos con magnitudes que varían en muchos órdenes de magnitud: <strong>masa (kg), intensidad de sonido (dB), brillo de estrellas, escalas de terremotos (Richter), pH</strong>. Los logaritmos decimales comprimen estos rangos enormes en números pequeños y manejables.</p>
+        <ul style="margin-left: 1.8rem;">
+            <li><strong>Escala Richter:</strong> M = log₁₀(A/A₀) → un terremoto de magnitud 6 es 10 veces más grande que uno de magnitud 5.</li>
+            <li><strong>Decibelios (sonido):</strong> β = 10·log₁₀(I/I₀) → el oído humano percibe desde 10⁻¹² W/m² hasta 1 W/m², un rango de 12 órdenes de magnitud.</li>
+            <li><strong>pH químico:</strong> pH = -log₁₀[H⁺] → convierte concentraciones muy pequeñas en valores entre 0 y 14.</li>
+            <li><strong>Ley de escala en biología:</strong> metabolismo ∝ Masa^{0.75} → al graficar en log-log, obtenemos una recta de pendiente 0.75.</li>
+        </ul>
+        <div class="nota">✨ <strong>Ventaja clave:</strong> Una función potencial (y = k·xⁿ) se convierte en una línea recta: log(y) = log(k) + n·log(x). ¡Graficar en papel log-log permite encontrar exponentes fácilmente!</div>
+    </div>
+
+    <!-- Propiedades fundamentales -->
+    <h2>📚 Propiedades de los logaritmos (base 10 y neperiano)</h2>
+    <div class="prop-grid">
+        <div class="prop-card"><strong>📌 Producto:</strong><br> log(A·B) = log A + log B</div>
+        <div class="prop-card"><strong>📌 Cociente:</strong><br> log(A/B) = log A – log B</div>
+        <div class="prop-card"><strong>📌 Potencia:</strong><br> log(Aⁿ) = n·log A</div>
+        <div class="prop-card"><strong>📌 Cambio de base:</strong><br> log_b(x) = log_k(x) / log_k(b)</div>
+        <div class="prop-card"><strong>📌 Logaritmo de 1:</strong><br> log(1) = 0 (cualquier base)</div>
+        <div class="prop-card"><strong>📌 Logaritmo de la base:</strong><br> log₁₀(10) = 1 ; ln(e) = 1</div>
+    </div>
+
+    <!-- Ejemplos y ejercicios interactivos -->
+    <h2>✍️ Ejercicios prácticos (con base 10 y neperiano)</h2>
+    <div class="ejercicios">
+        <div class="ejercicio-item">
+            <p><strong>Ejercicio 1:</strong> Sabiendo que log₁₀(2) ≈ 0.3010, log₁₀(3) ≈ 0.4771. Calcula log₁₀(6), log₁₀(1.5) y log₁₀(8).</p>
+            <button onclick="mostrarRespuesta('resp1')">Mostrar solución</button>
+            <div id="resp1" class="respuesta">
+                log₁₀(6) = log(2·3) = 0.3010+0.4771 = 0.7781<br>
+                log₁₀(1.5) = log(3/2) = 0.4771 - 0.3010 = 0.1761<br>
+                log₁₀(8) = log(2³) = 3·0.3010 = 0.9030
+            </div>
+        </div>
+        <div class="ejercicio-item">
+            <p><strong>Ejercicio 2:</strong> La intensidad de un terremoto en la escala Richter es R = log₁₀(I/I₀). Si un sismo tiene R=5.5 y otro R=6.5, ¿cuántas veces mayor es la amplitud del segundo respecto al primero?</p>
+            <button onclick="mostrarRespuesta('resp2')">Mostrar solución</button>
+            <div id="resp2" class="respuesta">
+                Diferencia de magnitud = 6.5 - 5.5 = 1.0 → 10¹ = 10 veces mayor en amplitud.
+            </div>
+        </div>
+        <div class="ejercicio-item">
+            <p><strong>Ejercicio 3:</strong> Resuelve usando propiedades: ln(e²·e³) y log₁₀(1000/10).</p>
+            <button onclick="mostrarRespuesta('resp3')">Mostrar solución</button>
+            <div id="resp3" class="respuesta">
+                ln(e²·e³) = ln(e⁵) = 5·ln(e) = 5.<br>
+                log₁₀(1000/10) = log₁₀(100) = log₁₀(10²)=2.
+            </div>
+        </div>
+        <div class="ejercicio-item">
+            <p><strong>Ejercicio 4 (aplicación física):</strong> El nivel de sonido en dB: β = 10·log₁₀(I/I₀). Si una fuente tiene I = 10⁻⁴ W/m² y I₀=10⁻¹² W/m², calcula β.</p>
+            <button onclick="mostrarRespuesta('resp4')">Mostrar solución</button>
+            <div id="resp4" class="respuesta">
+                I/I₀ = 10⁻⁴ / 10⁻¹² = 10⁸ → log₁₀(10⁸) = 8 → β = 10·8 = 80 dB.
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos de funciones logarítmicas -->
+    <h2>📈 Gráficos de funciones logarítmicas (y = log x)</h2>
+    <div class="graf-box">
+        <p>La función y = log₁₀(x) solo está definida para x > 0. Crece muy lentamente. Por ejemplo:</p>
+        <table>
+            <tr><th>x</th><th>0.1</th><th>1</th><th>10</th><th>100</th><th>1000</th></tr>
+            <tr><td>log₁₀(x)</td><td>-1</td><td>0</td><td>1</td><td>2</td><td>3</td></tr>
+        </table>
+        <p>Características: pasa por (1,0), asíntota vertical en x=0. El logaritmo neperiano tiene forma similar pero con pendiente distinta.</p>
+        <div class="ejemplo-grafico">
+            📌 <strong>Visualización conceptual:</strong> Si dibujas y = log₁₀(x) en papel normal, ves una curva que se aplana. Pero su poder aparece cuando transformamos escalas.
+        </div>
+    </div>
+
+    <!-- Papel logarítmico y log-log -->
+    <h2>📊 Papel logarítmico y papel log-log (clave para ciencias)</h2>
+    <div class="historia">
+        <p><strong>📄 Papel semilogarítmico:</strong> Un eje es logarítmico (generalmente Y) y el otro lineal. Se usa para <strong>crecimientos exponenciales</strong> o decaimientos: si y = a·e^{bx}, al graficar ln(y) vs x obtenemos una recta.</p>
+        <p><strong>📐 Papel doble logarítmico (log-log):</strong> Ambos ejes usan escala logarítmica. Sirve para detectar <strong>leyes de potencia</strong> del tipo y = k·xⁿ. Al tomar logaritmos: log y = log k + n·log x → ¡una línea recta!</p>
+        <div class="nota">
+            🧪 <strong>Ejemplo concreto (Leyes de escala en biología):</strong> Relación entre masa (kg) y ritmo cardíaco: R = c·M^{-0.25}. Si graficamos en papel log-log (log R vs log M), obtenemos una recta con pendiente -0.25. Así se descubren las leyes de escala.
+        </div>
+        <h3>📌 Pasos para usar papel log-log a mano</h3>
+        <ul>
+            <li>Identifica los valores mínimos y máximos de tus datos (ej: masa desde 0.06 kg hasta 5000 kg).</li>
+            <li>Encuentra el log₁₀ de cada valor (puedes usar calculadora o tabla).</li>
+            <li>En papel milimetrado normal, grafica log₁₀(masa) en X y log₁₀(variable) en Y.</li>
+            <li>O mejor: usa papel logarítmico especial, donde las divisiones están espaciadas según logaritmos, y marca directamente los valores originales sin calcular logs.</li>
+        </ul>
+        <p><strong>Ejemplo de construcción de escala logarítmica en papel común:</strong> Supón que quieres representar masas de 0.1 a 1000 kg. Calcula log₁₀: desde -1 hasta 3. Rango total = 4. Si tienes 20 cm en el eje, cada década (factor 10) ocupará 5 cm. ¡Así se "comprimen" los números enormes!</p>
+    </div>
+
+    <!-- Ejercicios sobre gráficos y escalas -->
+    <h2>📏 Ejercicios: uso de logaritmos para linealizar gráficos</h2>
+    <div class="ejercicios">
+        <div class="ejercicio-item">
+            <p><strong>Ejercicio 5 (Ley potencial):</strong> Se midió la frecuencia cardíaca (ppm) de distintos animales en función de su masa. Los datos teóricos siguen: R = 400 · M^{-0.25}. ¿Qué pendiente tendrá la recta al graficar log₁₀(R) vs log₁₀(M)?</p>
+            <button onclick="mostrarRespuesta('resp5')">Mostrar solución</button>
+            <div id="resp5" class="respuesta">
+                log R = log 400 - 0.25·log M → pendiente = -0.25.
+            </div>
+        </div>
+        <div class="ejercicio-item">
+            <p><strong>Ejercicio 6 (Identificar relación):</strong> Al graficar en papel log-log la vida media (años) en función de la masa, se obtuvo una recta con pendiente +0.22. ¿Qué tipo de expresión relaciona vida media y masa?</p>
+            <button onclick="mostrarRespuesta('resp6')">Mostrar solución</button>
+            <div id="resp6" class="respuesta">
+                Vida = k · M^{0.22} (ley potencial con exponente positivo ≈ 0.22).
+            </div>
+        </div>
+        <div class="ejercicio-item">
+            <p><strong>Ejercicio 7 (papel semilog):</strong> Una población de bacterias crece según N = N₀·e^{0.3 t} (t en horas). Si graficas ln(N) vs t, ¿qué pendiente obtienes? ¿y si usas papel semilogarítmico?</p>
+            <button onclick="mostrarRespuesta('resp7')">Mostrar solución</button>
+            <div id="resp7" class="respuesta">
+                ln(N) = ln(N₀) + 0.3·t → pendiente = 0.3. En papel semilog (eje Y log) se ve una recta.
+            </div>
+        </div>
+    </div>
+
+    <!-- Aplicación directa al práctico de Leyes de escala (contexto) -->
+    <div class="historia">
+        <h3>🐘 Conexión con el práctico "Leyes de escala"</h3>
+        <p>En el laboratorio trabajaste con una tabla de especies: masa, ritmo cardíaco, vida media. Ahora que conoces los logaritmos, entiendes por qué:</p>
+        <ul>
+            <li>Graficar <strong>log(ritmo) vs log(masa)</strong> muestra una recta decreciente → ley potencial inversa.</li>
+            <li>Graficar <strong>log(vida) vs log(masa)</strong> recta creciente.</li>
+            <li>El producto <strong>ritmo cardíaco × vida media (en minutos)</strong> resulta constante → porque los exponentes se cancelan: M^{-0.25} · M^{0.25} = M^0 = constante.</li>
+        </ul>
+        <p><strong>🎯 Conclusión:</strong> Los logaritmos transforman relaciones complejas en geometría sencilla (rectas), permitiendo descubrir leyes universales en biología, física y química.</p>
+    </div>
+
+    <!-- Tabla de ejemplo: convertir datos a log10 -->
+    <h2>🔄 Ejemplo práctico: convertir valores a log₁₀</h2>
+    <table>
+        <thead><tr><th>Especie</th><th>Masa (kg)</th><th>log₁₀(masa)</th><th>Ritmo (ppm)</th><th>log₁₀(ritmo)</th></tr></thead>
+        <tbody>
+            <tr><td>Hámster</td><td>0.06</td><td>-1.22</td><td>450</td><td>2.65</td></tr>
+            <tr><td>Conejo</td><td>1.0</td><td>0</td><td>205</td><td>2.31</td></tr>
+            <tr><td>Elefante</td><td>5000</td><td>3.70</td><td>30</td><td>1.48</td></tr>
+        </tbody>
+    </table>
+    <p>Con estos pares (logM, logR) puedes dibujar en papel milimetrado una línea recta y calcular la pendiente.</p>
+
+    <!-- Resumen propiedades + tips -->
+    <div class="nota">
+        💡 <strong>Tips para recordar:</strong><br>
+        - log₁₀(10ⁿ) = n .  Si ves un número muy grande o pequeño, piensa en su logaritmo.<br>
+        - En Física, usa logaritmos para comparar órdenes de magnitud (diferencias de log = factor de 10).<br>
+        - Papel log-log: ideal para detectar leyes de potencia (metabolismo, alometría).<br>
+        - El logaritmo neperiano ln aparece en decaimiento radiactivo, circuitos RC, leyes de enfriamiento.
+    </div>
+
+    <footer>
+        Material preparado para Laboratorio de Física / Biología.  
+        Los logaritmos son una herramienta poderosa: transforman multiplicaciones en sumas y curvas en rectas.  
+        ✨ "Con los logaritmos, el trabajo de décadas se reduce a días" — Laplace.
+    </footer>
+</div>
+
+<script>
+    function mostrarRespuesta(id) {
+        var elem = document.getElementById(id);
+        if (elem.style.display === "none" || elem.style.display === "") {
+            elem.style.display = "block";
+        } else {
+            elem.style.display = "none";
+        }
+    }
+    // Inicialmente todas las respuestas ocultas
+    window.onload = function() {
+        var respuestas = document.querySelectorAll('.respuesta');
+        respuestas.forEach(function(r) {
+            r.style.display = 'none';
+        });
+    }
+</script>
+</body>
+</html>

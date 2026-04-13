@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Liceo Dr. J. Belza. Lab. de Física.</title><title> Leyes de Escala - Práctico de Laboratorio | Física y Biología</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f7f0;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            color: #1a2e1f;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 2rem 2rem 3rem;
+        }
+
+        /* encabezado */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #2c7a3e;
+            padding-bottom: 1.5rem;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            letter-spacing: -0.5px;
+            color: #1f4f2d;
+            background: linear-gradient(135deg, #1f4f2d, #3c9e5c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .sub {
+            color: #2d5a3b;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* tabla */
+        .data-table {
+            overflow-x: auto;
+            margin: 2rem 0;
+            background: #fefef5;
+            border-radius: 24px;
+            border: 1px solid #cfe3cf;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: #2c7a3e;
+            color: white;
+            padding: 12px 8px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #ddebe0;
+            text-align: center;
+        }
+
+        tr:hover {
+            background: #f1f9ef;
+        }
+
+        /* secciones de preguntas */
+        .section {
+            margin: 2.5rem 0 1.5rem;
+            background: #fafef7;
+            border-radius: 28px;
+            padding: 1rem 1.8rem 1.8rem;
+            border-left: 8px solid #3c9e5c;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1a4a2a;
+            display: inline-block;
+            margin-bottom: 1rem;
+            border-bottom: 2px dashed #a3d8a3;
+            padding-right: 1rem;
+        }
+
+        .question-card {
+            background: white;
+            margin: 1.2rem 0;
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e2f0e2;
+        }
+
+        .question-number {
+            font-weight: 800;
+            font-size: 1.2rem;
+            background: #eef6ea;
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            text-align: center;
+            line-height: 32px;
+            border-radius: 40px;
+            margin-right: 12px;
+            color: #2c7a3e;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            display: inline;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #4e6b4a;
+            margin-top: 6px;
+            margin-left: 44px;
+            font-style: italic;
+        }
+
+        .answer-space {
+            margin-top: 12px;
+            margin-left: 44px;
+            background: #fefef2;
+            border-left: 3px solid #9bcd9b;
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-family: 'Courier New', monospace;
+            color: #2b482b;
+        }
+
+        .answer-space label {
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #5b8c5a;
+        }
+
+        textarea {
+            width: 100%;
+            border: 1px solid #cce2cc;
+            border-radius: 16px;
+            padding: 8px 12px;
+            font-family: inherit;
+            background: #fffdf7;
+            margin-top: 6px;
+            resize: vertical;
+        }
+
+        .note-box {
+            background: #eaf8e6;
+            padding: 1rem 1.5rem;
+            border-radius: 24px;
+            margin: 1.5rem 0;
+            border-left: 6px solid #2c7a3e;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #578b57;
+            border-top: 1px solid #cbe5cb;
+            padding-top: 1.8rem;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 1rem;
+            }
+            .section {
+                padding: 0.8rem 1rem;
+            }
+            .question-number {
+                width: 26px;
+                height: 26px;
+                font-size: 1rem;
+            }
+            .answer-space {
+                margin-left: 20px;
+            }
+        }
+
+        button {
+            background: #2c7a3e;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #1e5e2e;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🌿LEYES DE ESCALA</h1>
+        <div class="sub">Práctico de laboratorio · Descubriendo relaciones entre masa, ritmo cardíaco y longevidad</div>
+        <p style="margin-top: 12px; max-width: 700px; margin-left: auto; margin-right: auto; color: #3c6e47;">Objetivo: Investigar si existen leyes universales que relacionen el tamaño de los animales con su ritmo cardíaco y longevidad, y descubrir una posible “constante biológica”.</p>
+    </div>
+
+    <!-- Tabla de especies -->
+    <div class="data-table">
+        <table>
+            <thead>
+                <tr><th>Especie</th><th>Masa (kg)</th><th>Ritmo cardíaco (ppm)</th><th>Vida media (años)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Hámster</td><td>0,060</td><td>450</td><td>3</td></tr>
+                <tr><td>Conejo</td><td>1,00</td><td>205</td><td>9</td></tr>
+                <tr><td>Pollo</td><td>1,50</td><td>275</td><td>15</td></tr>
+                <tr><td>Gato</td><td>2,00</td><td>150</td><td>15</td></tr>
+                <tr><td>Perro Pequeño</td><td>2,01</td><td>100</td><td>10</td></tr>
+                <tr><td>Perro Mediano</td><td>5,00</td><td>90</td><td>15</td></tr>
+                <tr><td>Mono</td><td>5,00</td><td>190</td><td>15</td></tr>
+                <tr><td>Perro Grande</td><td>8,00</td><td>75</td><td>17</td></tr>
+                <tr><td>Humanos</td><td>90</td><td>70*</td><td>70</td></tr>
+                <tr><td>Cerdo</td><td>150</td><td>70</td><td>25</td></tr>
+                <tr><td>Vaca</td><td>800</td><td>65</td><td>22</td></tr>
+                <tr><td>Girafa</td><td>900</td><td>65</td><td>20</td></tr>
+                <tr><td>Caballo</td><td>1200</td><td>44</td><td>40</td></tr>
+                <tr><td>Elefante</td><td>5000</td><td>30</td><td>70</td></tr>
+            </tbody>
+        </table>
+        <p style="padding: 8px 16px; font-size: 0.8rem; background: #f4faf2;">* Humanos: rango 60–80 ppm, se utiliza valor representativo 70 ppm para cálculos.</p>
+    </div>
+
+    <!-- PRIMERA MIRADA -->
+    <div class="section">
+        <h2>🔍 PRIMERA MIRADA – Exploración cualitativa</h2>
+        <div class="question-card"><span class="question-number">1</span><span class="question-text">Observa la tabla. ¿Qué relación cualitativa ves entre masa y ritmo cardíaco? ¿Y entre masa y vida media?</span>
+            <div class="answer-space"><label>📝 Respuesta (anotá tus ideas)</label><textarea rows="2" placeholder="Escribí tus observaciones..."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">2</span><span class="question-text">¿Hay alguna especie que parezca no seguir la tendencia general? ¿Cuál y por qué crees que ocurre?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Posible outliers: mono o humano, etc."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">3</span><span class="question-text">¿El humano se comporta como esperarías por su masa? Justifica.</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Escribí tus observaciones..."></textarea></div>
+        </div>
+    </div>
+
+    <!-- PRIMER GRÁFICO - Ritmo cardíaco vs masa -->
+    <div class="section">
+        <h2>📈 PRIMER GRÁFICO – Ritmo cardíaco en función de la masa</h2>
+        <div class="question-card"><span class="question-number">4</span><span class="question-text">¿Por qué no es conveniente usar una escala lineal normal para la masa? (Ayuda: mirá el valor más pequeño y el más grande)</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Escribí tus observaciones..."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">5</span><span class="question-text">Usando papel milimetrado común, convertí cada masa a <strong>log₁₀(masa)</strong>. Luego graficá: Eje X → log₁₀(masa), Eje Y → ritmo cardíaco (ppm). Describe la tendencia.</span>
+            <div class="answer-space"><textarea rows="2" placeholder="¿Lineal? ¿Decreciente?"></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">6</span><span class="question-text">Repetí el gráfico pero ahora con <strong>log₁₀(ritmo cardíaco)</strong> en el eje Y. ¿Qué cambia? ¿Se ve más lineal?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Escribí tus observaciones..."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">7</span><span class="question-text">¿Qué relación matemática simple podría existir entre ritmo cardíaco y masa? (R = k · Mᵃ). ¿Cuánto vale “a” aproximadamente? (negativo, cercano a –0.25?)</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Escribí tus observaciones..."></textarea></div>
+        </div>
+    </div>
+
+    <!-- SEGUNDO GRÁFICO - Vida media -->
+    <div class="section">
+        <h2>📉 SEGUNDO GRÁFICO – Vida media vs. masa</h2>
+        <div class="question-card"><span class="question-number">8</span><span class="question-text">Graficá <strong>vida media</strong> en función de <strong>masa</strong>, también en escala log–log (log₁₀ en ambos ejes). ¿Qué tipo de relación observás? ¿Creciente o decreciente?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Escribí tus observaciones..."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">9</span><span class="question-text">Compará la pendiente de esta recta con la del gráfico anterior. ¿Son similares en valor absoluto? ¿De qué signo?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Escribí tus observaciones..."></textarea></div>
+        </div>
+    </div>
+
+    <!-- DESCUBRIENDO UNA CONSTANTE -->
+    <div class="section">
+        <h2>🧮 DESCUBRIENDO UNA CONSTANTE – El producto clave</h2>
+        <div class="question-card"><span class="question-number">10</span><span class="question-text">Para cada especie, calculá el producto entre <strong>ritmo cardíaco (ppm) × vida media (años)</strong>. Anotá algunos valores. ¿Se parecen entre especies muy diferentes?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Ej: Hámster 450*3=1350 ; Elefante 30*70=2100... relativamente cercanos"></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">11</span><span class="question-text">Ese producto aún no es muy significativo. Para obtener una cantidad física útil, convertí la vida media a <strong>minutos</strong> (1 año = 365×24×60 minutos). Luego calculá:<br>
+            <strong>Latidos totales en la vida = ppm × (vida en minutos)</strong>. Hacé el cálculo para al menos 5 especies (hámster, humano, elefante, perro mediano, vaca). ¿Qué observás?</span>
+            <div class="answer-space"><textarea rows="4" placeholder="Registrá los latidos totales (orden de magnitud ~10⁹). ¿Son similares?"></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">12</span><span class="question-text">Graficá (en papel o mentalmente) <strong>latidos totales</strong> en función de <strong>masa</strong> (ambos en escala logarítmica). ¿Cómo es la tendencia? ¿Horizontal? ¿Qué significa eso?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Si es horizontal, el producto es independiente de la masa → constante biológica."></textarea></div>
+        </div>
+    </div>
+
+    <!-- INTERPRETACIÓN - Ley de conservación -->
+    <div class="section">
+        <h2>💡 INTERPRETACIÓN – ¿Una “ley de conservación” en biología?</h2>
+        <div class="question-card"><span class="question-number">13</span><span class="question-text">¿Qué significado físico o biológico podría tener que el número total de latidos sea aproximadamente constante?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Indica que corazones rápidos laten menos años y viceversa; energía total por vida similar."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">14</span><span class="question-text">En física, una magnitud que no cambia en un proceso se llama <strong>conservada</strong>. ¿Podemos decir que el número total de latidos se conserva entre especies? ¿Por qué sí o por qué no?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Más bien es una relación de escala, no una conservación estricta pero sí invariante en orden de magnitud."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">15</span><span class="question-text">¿Qué diferencias hay entre una ley de conservación en física (ej: energía) y esta relación de escala en biología?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="En física es exacta bajo condiciones; en biología es estadística y aproximada, con variaciones."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">16</span><span class="question-text">¿Podrías predecir la vida media de un animal nuevo de 200 kg si supieras su ritmo cardíaco? ¿Qué fórmula usarías?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Usando latidos totales ≈ constante: vida (años) = K / (ppm * 525600)."></textarea></div>
+        </div>
+    </div>
+
+    <!-- EXPERIMENTO EXTRA + CONCLUSIONES -->
+    <div class="section">
+        <h2>🧪 DISCUSIÓN AVANZADA & CIERRE</h2>
+        <div class="question-card"><span class="question-number">17</span><span class="question-text">Investiguen: ¿Qué pasa con animales muy pequeños (ratones) o muy grandes (ballenas)? ¿Sigue cumpliéndose la relación? ¿Por qué podría romperse?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="En general sí, pero existen efectos metabólicos, temperatura, etc."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">18</span><span class="question-text">¿Qué limitaciones tiene este modelo? Mencioná al menos dos factores que no están considerados en la tabla y que podrían afectar los resultados.</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Ej: actividad física, temperatura corporal, diferencias metabólicas entre taxones."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">19</span><span class="question-text"><strong>Conclusión grupal:</strong> ¿Existe una ley de escala que relacione masa, ritmo cardíaco y longevidad en mamíferos? Si existe, ¿cuál es su expresión matemática y qué significado biológico tiene?</span>
+            <div class="answer-space"><textarea rows="4" placeholder="Redacten un párrafo integrador: 'Ritmo ∝ M^-0.25, vida ∝ M^0.25, por lo tanto latidos totales ∝ constante'"></textarea></div>
+        </div>
+        <div class="note-box">
+            <strong>📌 CONCEPTO IMPORTANTE (Física → Biología):</strong> En Física, cuando una magnitud no cambia decimos que se conserva. En este práctico, el <strong>producto ritmo cardíaco × vida media (en minutos)</strong> es aproximadamente constante → número total de latidos ~ 10⁹. Esto sugiere una "ley de escala universal" en mamíferos: el corazón late un número similar de veces a lo largo de la vida, independientemente del tamaño.
+        </div>
+    </div>
+
+    <!-- SECCIÓN PRÁCTICA DE GRÁFICO MANUAL (sugerencias de escala) -->
+    <div class="section">
+        <h2>📐 TALLER DE GRÁFICO EN PAPEL – Escala y divisiones</h2>
+        <div class="question-card"><span class="question-number">🎯</span><span class="question-text">Antes de graficar en SciDAVis o computadora, realizá un gráfico a mano con escala logarítmica (papel log o conversión). Elegí el número de divisiones adecuado para el rango de masa [0.06 kg a 5000 kg]. Calculá log₁₀(masa) mínimo ≈ -1.22 y máximo ≈ 3.70. ¿Cuántas divisiones usarías para que el gráfico ocupe bien la hoja?</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Por ejemplo rango de log ≈ 4.9 décadas, usar 10 divisiones de 0.5 en X."></textarea></div>
+        </div>
+        <div class="question-card"><span class="question-number">✏️</span><span class="question-text">¿Cuál es la ventaja de usar papel doblemente logarítmico? Explicá cómo visualizarías la ley de potencias.</span>
+            <div class="answer-space"><textarea rows="2" placeholder="Convierte relaciones potenciales en líneas rectas, facilitando hallar exponentes."></textarea></div>
+        </div>
+    </div>
+
+    <!-- Tabla de ayuda para cálculos (latidos totales sugeridos) -->
+    <div class="note-box">
+        <strong>🔬 AYUDA PARA CÁLCULO DE LATIDOS TOTALES (opcional):</strong><br>
+        Vida en minutos = años × 525.600 (1 año = 365 días × 24 h × 60 min = 525.600 min)<br>
+        Ejemplo Hámster: 3 años × 525.600 = 1.576.800 min ; latidos totales = 450 ppm × 1.576.800 ≈ 7.1×10⁸.<br>
+        Ejemplo Elefante: 70 años × 525.600 = 36.792.000 min ; latidos = 30 × 36.792.000 ≈ 1.1×10⁹.<br>
+        ⚡ Verás que el orden de magnitud es muy similar (~10⁹). ¡Ese es el descubrimiento!
+    </div>
+
+    <!-- Pequeña sección para hacer cálculos rápidos simulados -->
+    <div class="section">
+        <h2>📊 TABLA RESUMEN (para completar con latidos totales)</h2>
+        <div style="overflow-x: auto;">
+            <table style="background: white; border: 1px solid #bddbaf;">
+                <thead><tr><th>Especie</th><th>Masa (kg)</th><th>ppm</th><th>Vida (años)</th><th>Vida (minutos)</th><th>Latidos totales</th></tr></thead>
+                <tbody>
+                    <tr><td>Hámster</td><td>0.06</td><td>450</td><td>3</td><td>______</td><td>______</td></tr>
+                    <tr><td>Humano</td><td>90</td><td>70</td><td>70</td><td>______</td><td>______</td></tr>
+                    <tr><td>Elefante</td><td>5000</td><td>30</td><td>70</td><td>______</td><td>______</td></tr>
+                    <tr><td>Perro mediano</td><td>5</td><td>90</td><td>15</td><td>______</td><td>______</td></tr>
+                    <tr><td>Vaca</td><td>800</td><td>65</td><td>22</td><td>______</td><td>______</td></tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 10px;"><em>Completá las columnas vacías y discutí si el producto permanece constante.</em></p>
+        </div>
+    </div>
+
+    <!-- Para trabajar con SciDAVis -->
+    <div class="note-box" style="background: #e0f0e0;">
+        <strong>💻 SUGERENCIA PARA SciDAVis / computadora:</strong><br>
+        - Crear columnas: Masa, Ritmo, VidaMedia.<br>
+        - Agregar columnas calculadas: logMasa = log10(Masa); logRitmo = log10(Ritmo); logVida = log10(VidaMedia);<br>
+        - LatidosTotales = Ritmo * (VidaMedia * 525600).<br>
+        - Graficar logRitmo vs logMasa (ajuste lineal → pendiente ≈ -0.25).<br>
+        - Graficar logVida vs logMasa (pendiente ≈ +0.25).<br>
+        - Graficar LatidosTotales vs Masa en escala log-log → nube horizontal.<br>
+        - Discutir el significado de la "invariante".
+    </div>
+
+    <div class="footer">
+        🌱 Liceo Dr. Juan Belza – Laboratorio de Física · Leyes de escala en Biología<br>
+        Trabajo en equipo: analizar, graficar (lápiz y papel + digital) y descubrir relaciones entre masa, ritmo cardíaco y longevidad. Prof. Alejandro Parnizari asistido con Deepseek.
+    </div>
+</div>
+
+<!-- Un pequeño script para mejorar experiencia (limpiar o copiar) -->
+<script>
+    // simplemente mejora visual: no acción invasiva
+    console.log("Práctico Leyes de escala - Listo para investigar");
+</script>
+</body>
+</html>
